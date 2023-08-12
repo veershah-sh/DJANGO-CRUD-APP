@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block body %}
+<div class="container mt-5 p-5 border rounded">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success text-center mb-3">
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="#" class="btn btn-primary px-4 py-2 btn-sm" data-bs-toggle="modal" data-bs-target="#addCustomerModal">Add Customer</a>
+        <div class="">
+            <form action="" method="post" class="d-flex">
+                {% csrf_token %}
+                <input type="search" name="searchquery" value="{{query}}" class="form-control" placeholder="Search">
+                <button class="btn btn-success mx-2" name="search">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <table class="table mt-3 table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Customer Name</th>
+            <th scope="col">Customer Email</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+                <tr>
+                    <th>{{customer.id}}</th>
+                    <td>{{customer.name}}</td>
+                    <td>{{customer.email}}</td>
+                    <td>
+                        <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#updateCustomerModal_{{customer.id}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCustomerModal_{{customer.id}}"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+                <!-- Update Customer Modal -->
+                <div class="modal fade" id="updateCustomerModal_{{customer.id}}" tabindex="-1" aria-labelledby="updateCustomerModalLabel_{{customer.id}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="updateCustomerModalLabel_{{customer.id}}">Update Customer</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="id" value="{{customer.id}}">
+                                <div class="">
+                                    <label for="name">Customer Name</label>
+                                    <input type="text" name="name" value={{customer.name}} class="form-control" id="name" Required>
+                                    <br>
+                                    <label for="email">Customer Email</label>
+                                    <input type="email" name="email" value={{customer.email}} class="form-control" id="email" Required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="update">Update Customer</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+
+                <!-- delete Customer Modal -->
+                <div class="modal fade" id="deleteCustomerModal_{{customer.id}}" tabindex="-1" aria-labelledby="deleteCustomerModalLabel_{{customer.id}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{customer.id}}">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>Are you sure? You want to delete.</p>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger" name="delete">Delete Customer</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+<!-- Add Customer Modal -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="">
+                <label for="name">Customer Name</label>
+                <input type="text" name="name" class="form-control" id="name" Required>
+                <br>
+                <label for="email">Customer Email</label>
+                <input type="email" name="email" class="form-control" id="email" Required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" name="add">Add New Customer</button>
+            </div>
+          </div>
+      </form>
+    </div>
+</div>
+{% endblock body %}
