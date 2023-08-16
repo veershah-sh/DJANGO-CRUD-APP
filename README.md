@@ -11,7 +11,7 @@ A simple CRUD app made with django.
    ```
 2. Install Requirements 
    ```python 
-   pip install requirements.txt
+   pip install -r requirements.txt
    ```
 3. Make migrations
    ```python 
